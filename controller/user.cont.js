@@ -1,8 +1,10 @@
 //user managment APIs
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const {
     User,
-    validateUserModel
+    validateUserModel,
+    validateUserLogin
 } = require("../models/user.model");
 const sendEmail = require("../utils/sendEmail");
 
@@ -122,4 +124,60 @@ exports.verifyEmail = async (req, res, next) => {
         status: "success",
         message: "Email verified successfully"
     })
+}
+//login
+exports.login = async (req, res, next) => {
+    try {
+        const {
+            email,
+            password
+        } = req.body;
+        //validate request
+        const {
+            error
+        } = await validateUserLogin(req.body);
+        if (error) {
+            const message = error.details[0].message.split('"').join('');
+            return res.status(400).json({
+                status: "fail",
+                message
+            });
+        }
+        //check if user exist
+        const user = await User.findOne({
+            email
+        });
+        if (!user) {
+            return res.status(400).json({
+                status: "fail",
+                message: "User does not exist"
+            })
+        }
+        //check if password is correct
+        const isPasswordCorrect = await user.comparePassword(password, user.password);
+        // console.log(isPasswordCorrect);
+        if (!isPasswordCorrect) {
+            return res.status(400).json({
+                status: "fail",
+                message: "Invalid credentials"
+            })
+        }
+        //create token
+        const token = jwt.sign({
+            id: user._id
+        }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN
+        });
+        res.cookie('jwt', token, {
+            httpOnly: true
+        });
+        return res.status(200).json({
+            status: "success",
+            token
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("internal server error")
+    }
 }

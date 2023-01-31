@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const userSchmema = new mongoose.Schema({
     name: {
         type: String,
@@ -53,12 +53,13 @@ userSchmema.pre('save', async function (next) {
     if (!this.isModified('password')) {
         return next();
     }
-    this.password = await jwt.sign(this.password, process.env.JWT_SECRET);
+    const salt = await bcrypt.genSalt(12);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
 });
-//compare password
+//compare password with bcrypt
 userSchmema.methods.comparePassword = async function (candidatePassword, userPassword) {
-    return await jwt.verify(candidatePassword, process.env.JWT_SECRET) === userPassword;
+    return await bcrypt.compare(candidatePassword, userPassword);
 }
 //validate with joi
 function validateUser(user) {
@@ -66,7 +67,7 @@ function validateUser(user) {
         name: Joi.string().required(),
         email: Joi.string().required().email(),
         phone: Joi.string().required(),
-        password:Joi.string().min(8).max(255).required(),
+        password: Joi.string().min(8).max(255).required(),
         emailVerified: Joi.boolean(),
         emailVerificationToken: Joi.string(),
         emailVerificationTokenExpires: Joi.date(),
@@ -76,5 +77,15 @@ function validateUser(user) {
     })
     return schema.validate(user);
 }
+//login
+//validate with joi
+function validateUserLogin(user) {
+    const schema = Joi.object({
+        email: Joi.string().required().email(),
+        password: Joi.string().min(8).max(255).required(),
+    })
+    return schema.validate(user);
+}
 module.exports.validateUserModel = validateUser;
+module.exports.validateUserLogin = validateUserLogin;
 module.exports.User = mongoose.model('User', userSchmema);

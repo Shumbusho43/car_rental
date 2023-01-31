@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const expressSslify = require('express-sslify');
 const xssClean = require('xss-clean');
@@ -30,6 +31,7 @@ app.use(helmet());
 // Prevent http param pollution
 app.use(hpp());
 // Enable https
+app.use(cookieParser());
 process.env.NODE_ENV === 'production' ? app.use(expressSslify.HTTPS({
         trustProtoHeader: true
     })) :
