@@ -181,3 +181,62 @@ exports.login = async (req, res, next) => {
         return res.status(500).send("internal server error")
     }
 }
+//getting logged in user
+exports.getLoggedInUser = async (req, res, next) => {
+    try {
+        const {
+            id
+        } = req.user;
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(400).json({
+                status: "fail",
+                message: "User does not exist"
+            })
+        }
+        res.status(200).json({
+            status: "success",
+            data: user
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("internal server error")
+    }
+}
+
+//getting all users
+exports.getAllUsers = async (req, res, next) => {
+    try {
+        const users = await User.find();
+        res.status(200).json({
+            status: "success",
+            data: users
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("internal server error")
+    }
+}
+//getting a single user
+exports.getSingleUser = async (req, res, next) => {
+    try {
+        const {
+            id
+        } = req.params;
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(400).json({
+                status: "fail",
+                message: "User does not exist"
+            })
+        }
+        res.status(200).json({
+            status: "success",
+            data: user
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send("internal server error")
+    }
+}
