@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
@@ -52,6 +53,17 @@ app.use(limiter);
 // Routes
 app.use('/api/v1/users', userRouter);
 app.use("/api/v1/cars", carRouter);
+
+//documentation
+// documentation
+const swaggerDocs = require("./swagger.json");
+app.use(
+    "/documentation",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocs, false, {
+        docExpansion: "none",
+    })
+);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

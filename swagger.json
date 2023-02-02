@@ -1,0 +1,242 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "CAR RENTAL APIs",
+        "description": "CAR RENTAL APIs"
+    },
+    "tags": [{
+            "name": "User",
+            "description": "User API"
+        },
+        {
+            "name": "Car",
+            "description": "Car API"
+        }
+    ],
+    "paths": {
+        "/api/v1/users/signup": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Sign up",
+                "description": "Sign up",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "format": "email",
+                            "required": true
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "phone": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        },
+                        "repeat_password": {
+                            "type": "string"
+                        }
+                    }
+                }],
+                "responses": {
+                    "201": {
+                        "description": "check your email"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login",
+                "description": "Login",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [{
+                    "in": "body",
+                    "name": "body",
+                    "properties": {
+                        "email": {
+                            "type": "string",
+                            "format": "email",
+                            "required": true
+                        },
+                        "password": {
+                            "type": "string"
+                        }
+                    }
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/users": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get users",
+                "description": "Get users",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get user by id",
+                "description": "Get user by id",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "User id",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/me": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get current user",
+                "description": "Get current user",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/cars/{id}": {
+            "post": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Create car",
+                "description": "Create car",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "pricePerHr": {
+                                "type": "number",
+                                "required": true
+                            },
+                            "sits": {
+                                "type": "number",
+                                "required": true
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "numberPlate": {
+                                "type": "string",
+                                "required": true
+                            },
+                            "model": {
+                                "type": "string",
+                                "required": true
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get car by id",
+                "description": "Get car by id",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [{
+                    "name": "id",
+                    "in": "path",
+                    "description": "Car id",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/api/v1/cars": {
+            "get": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Get cars",
+                "description": "Get cars",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+
+        }
+    }
+}
