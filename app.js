@@ -14,6 +14,9 @@ const {
 const {
     userRouter
 } = require('./routes/user.routes');
+const {
+    carRouter
+} = require('./routes/car.routes');
 // Create express server
 const app = express();
 // Database
@@ -48,6 +51,7 @@ app.use(limiter);
 
 // Routes
 app.use('/api/v1/users', userRouter);
+app.use("/api/v1/cars", carRouter);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

@@ -9,13 +9,12 @@ const carModel = new mongoose.Schema({
         type: String,
         required: true
     },
-    price: {
+    pricePerHr: {
         type: Number,
         required: true
     },
     image: {
-        type: String,
-        required: true
+        type: String
     },
     cloudinaryPublicId: {
         type: String,
@@ -30,11 +29,16 @@ const carModel = new mongoose.Schema({
     },
     numberPlate: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     owner: {
         type: mongoose.Schema.ObjectId,
         ref: "User",
+        required: true
+    },
+    description: {
+        type: String,
         required: true
     },
     createdAt: {
@@ -46,11 +50,12 @@ const validateCar = (car) => {
     const schema = Joi.object({
         name: Joi.string().required(),
         model: Joi.string().required(),
-        price: Joi.number().required(),
-        image: Joi.string().required(),
-        sits: Joi.number().required(),
-        numberPlate: Joi.string().required(),
-        owner: Joi.string().required(),
+        pricePerHr: Joi.number().required(),
+        image: Joi.string(),
+        sits: Joi.number().required().max(60),
+        numberPlate: Joi.string().required().max(10),
+        owner: Joi.string(),
+        description: Joi.string().required().max(100)
     });
     return schema.validate(car);
 }
