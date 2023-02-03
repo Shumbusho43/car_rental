@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
+const fileUpload = require("express-fileupload")
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
@@ -20,6 +21,11 @@ const {
 } = require('./routes/car.routes');
 // Create express server
 const app = express();
+//file uploader
+app.use(fileUpload({
+    useTempFiles: true,
+    tempFileDir: '/tmp/'
+}));
 // Database
 dbConnection();
 // Trust proxy

@@ -218,6 +218,34 @@
                         "description": "OK"
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "Car"
+                ],
+                "summary": "Update car by id",
+                "description": "Update car by id",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [{
+                        "name": "id",
+                        "in": "path",
+                        "description": "Car id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "photo",
+                        "type": "file"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
             }
         },
         "/api/v1/cars": {

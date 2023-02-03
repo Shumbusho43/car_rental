@@ -1,4 +1,5 @@
 //car management apis
+const path = require("path");
 const {
     Car,
     validateCarModel
@@ -9,6 +10,9 @@ const {
 const {
     validateObjectId
 } = require("../utils/mongoId");
+const {
+    cloudinary
+} = require('../utils/cloudinary');
 //check if owner exist
 const ownerExist = async (owner) => {
     const exist = await User.findOne({
@@ -49,7 +53,7 @@ exports.uploadCar = async (req, res) => {
             });
         }
         //check if owner exist
-        const exist =await ownerExist(owner);
+        const exist = await ownerExist(owner);
         if (!exist) {
             return res.status(400).json({
                 status: "fail",
@@ -186,3 +190,125 @@ exports.updateCar = async (req, res) => {
         });
     }
 };
+
+//uploading car image
+exports.uploadCarImage = async (req, res, next) => {
+    try {
+        const {
+            id
+        } = req.params;
+        //validate id
+        const valid = validateObjectId(id);
+        if (!valid) {
+            return res.status(400).json({
+                message: "invalid car id"
+            });
+        }
+        //check if car exists
+        const car = await Car.findById(id);
+        if (!car) {
+            return res.status(400).json({
+                message: "car not found"
+            });
+        }
+        //check if file is uploaded
+        if (!req.files) {
+            return res.status(400).json({
+                message: "file not uploaded"
+            });
+        }
+        //check if file is an image
+        const file = req.files.photo;
+        if (!file.mimetype.startsWith("image")) {
+            return res.status(400).json({
+                message: "file is not an image"
+            });
+        }
+        //check if file size is less than 10mb
+        if (file.size > 10000000) {
+            return res.status(400).json({
+                message: "file size is too large"
+            });
+        }
+        //checking photo name
+        file.name = `photo_${car._id}${path.parse(file.name).ext}`;
+        //checking if project has cloudinary public id
+        if (car.cloudinaryPublicId == null) {
+            //uploading to cloudinary
+            const result = await cloudinary.uploader.upload(file.tempFilePath).then(result => {
+                const body = {
+                    image: result.secure_url,
+                    cloudinaryPublicId: result.public_id
+                }
+                Car.findByIdAndUpdate(id, {
+                    image: body.image,
+                    cloudinaryPublicId: body.cloudinaryPublicId
+                }, {
+                    new: true
+                }, (err, project) => {
+                    if (err) {
+                        return res.status(500).json({
+                            message: "something went wrong"
+                        });
+                    }
+                    if (!project) {
+                        return res.status(400).json({
+                            message: "project not found"
+                        });
+                    }
+                    res.status(200).json({
+                        message: "project image uploaded successfully",
+                        data: project
+                    })
+                })
+            }).catch(error => {
+                console.log(error);
+                return res.status(500).json({
+                    message: "something went wrong"
+                });
+            });
+        }
+        //deleting old image from cloudinary
+        else {
+            await cloudinary.uploader.destroy(car.cloudinaryPublicId);
+            //uploading new image to cloudinary
+            const result = await cloudinary.uploader.upload(file.tempFilePath).then(result => {
+                const body = {
+                    image: result.secure_url,
+                    cloudinaryPublicId: result.public_id
+                }
+                Car.findByIdAndUpdate(id, {
+                    image: body.image,
+                    cloudinaryPublicId: body.cloudinaryPublicId
+                }, {
+                    new: true
+                }, (err, project) => {
+                    if (err) {
+                        return res.status(500).json({
+                            message: "something went wrong"
+                        });
+                    }
+                    if (!project) {
+                        return res.status(400).json({
+                            message: "project not found"
+                        });
+                    }
+                    res.status(200).json({
+                        message: "project image uploaded successfully",
+                        data: project
+                    })
+                })
+            }).catch(error => {
+                console.log(error);
+                return res.status(500).json({
+                    message: "something went wrong"
+                });
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "something went wrong"
+        });
+    }
+}
