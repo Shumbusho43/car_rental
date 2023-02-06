@@ -19,6 +19,9 @@ const {
 const {
     carRouter
 } = require('./routes/car.routes');
+const {
+    borrowCarRouter
+} = require('./routes/borrow.car');
 // Create express server
 const app = express();
 //file uploader
@@ -59,6 +62,7 @@ app.use(limiter);
 // Routes
 app.use('/api/v1/users', userRouter);
 app.use("/api/v1/cars", carRouter);
+app.use("/api/v1/borrow", borrowCarRouter)
 
 //documentation
 // documentation

@@ -23,10 +23,6 @@ const carModel = new mongoose.Schema({
         type: Number,
         required: true
     },
-    hired: {
-        type: Boolean,
-        default: false
-    },
     numberPlate: {
         type: String,
         required: true,
@@ -40,6 +36,11 @@ const carModel = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        enum: ["free", "unavailable"],
+        default: "free"
     },
     createdAt: {
         type: Date,

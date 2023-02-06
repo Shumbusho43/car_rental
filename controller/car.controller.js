@@ -13,6 +13,10 @@ const {
 const {
     cloudinary
 } = require('../utils/cloudinary');
+
+const {
+    BorrowCar
+} = require('../models/car.borrow')
 //check if owner exist
 const ownerExist = async (owner) => {
     const exist = await User.findOne({
@@ -305,6 +309,52 @@ exports.uploadCarImage = async (req, res, next) => {
                 });
             });
         }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "something went wrong"
+        });
+    }
+}
+
+//get borrowed cars
+exports.getBorrowedCars = async (req, res) => {
+    try {
+        const cars = await BorrowCar.findOne({
+            status: "borrowed"
+        }).populate("carId").populate("userId");
+        if (!cars) {
+            return res.status(400).json({
+                message: "no cars borrowed"
+            });
+        }
+        res.status(200).json({
+            message: "cars borrowed",
+            data: cars
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "something went wrong"
+        });
+    }
+}
+
+//get free cars
+exports.getFreeCars = async (req, res) => {
+    try {
+        const cars = await Car.find({
+            status: "free"
+        });
+        if (!cars) {
+            return res.status(400).json({
+                message: "no free cars"
+            });
+        }
+        res.status(200).json({
+            message: "free cars",
+            data: cars
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
