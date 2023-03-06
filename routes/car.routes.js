@@ -15,7 +15,7 @@ const router = express.Router();
 router.get("/get-borrowed-cars", protect, role('owner', 'admin'), getBorrowedCars);
 router.get("/get-free-cars", getFreeCars);
 router.route("/:id")
-    .post(uploadCar, role('owner'))
+    .post(uploadCar,protect, role('owner'))
     .get(getCarById)
     .put(uploadCarImage,protect, role('owner'))
 router.get("/", getAllCars)

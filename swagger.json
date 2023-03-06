@@ -96,6 +96,13 @@
                 "produces": [
                     "application/json"
                 ],
+                "parameters": [{
+                    "name": "Authorization",
+                    "in": "header",
+                    "description": "JWT access token",
+                    "required": true,
+                    "type": "string"
+                }],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -114,12 +121,20 @@
                     "application/json"
                 ],
                 "parameters": [{
-                    "name": "id",
-                    "in": "path",
-                    "description": "User id",
-                    "required": true,
-                    "type": "string"
-                }],
+                        "name": "id",
+                        "in": "path",
+                        "description": "User id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "JWT access token",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -137,6 +152,13 @@
                 "produces": [
                     "application/json"
                 ],
+                "parameters": [{
+                    "name": "Authorization",
+                    "in": "header",
+                    "description": "JWT access token",
+                    "required": true,
+                    "type": "string"
+                }],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -158,6 +180,13 @@
                         "name": "id",
                         "in": "path",
                         "description": "User id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "JWT access token",
                         "required": true,
                         "type": "string"
                     },
@@ -229,6 +258,13 @@
                     "application/json"
                 ],
                 "parameters": [{
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "JWT access token",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
                         "name": "id",
                         "in": "path",
                         "description": "Car id",
@@ -240,6 +276,7 @@
                         "name": "photo",
                         "type": "file"
                     }
+
                 ],
                 "responses": {
                     "200": {

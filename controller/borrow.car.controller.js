@@ -19,7 +19,7 @@ exports.borrowACar = async (req, res) => {
     //check if car is not borrowed
     const borrowed = await BorrowCar.findOne({
         carId,
-        status: "borrowed"
+        status: "In use"
     })
     if (borrowed) return res.status(400).json({
         status: false,
@@ -36,7 +36,7 @@ exports.borrowACar = async (req, res) => {
         message: "Car not borrowed"
     })
     //update car status
-    car.status = "unavailable";
+    car.status = "In use";
     await car.save();
     res.status(200).json({
         status: true,

@@ -39,8 +39,8 @@ const carModel = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["free", "unavailable"],
-        default: "free"
+        enum: ["In use", "Available","Pending","Returned","Reserved"],
+        default: "Available"
     },
     createdAt: {
         type: Date,

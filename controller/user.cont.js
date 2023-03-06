@@ -150,7 +150,7 @@ exports.login = async (req, res, next) => {
         if (!user) {
             return res.status(400).json({
                 status: "fail",
-                message: "User does not exist"
+                message: "Invalid credentials"
             })
         }
         //check if password is correct

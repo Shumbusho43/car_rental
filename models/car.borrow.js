@@ -20,8 +20,8 @@ const borrowCarModel = moongose.Schema({
     },
     status: {
         type: String,
-        enum: ["borrowed", "returned"],
-        default: "borrowed"
+        enum: ["In use", "Returned"],
+        default: "In use"
     }
 });
 module.exports.BorrowCar = moongose.model("BorrowingCar", borrowCarModel);

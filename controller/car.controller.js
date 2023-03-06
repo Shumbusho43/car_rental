@@ -321,7 +321,7 @@ exports.uploadCarImage = async (req, res, next) => {
 exports.getBorrowedCars = async (req, res) => {
     try {
         const cars = await BorrowCar.findOne({
-            status: "borrowed"
+            status: "In use"
         }).populate("carId").populate("userId");
         if (!cars) {
             return res.status(400).json({
@@ -344,7 +344,7 @@ exports.getBorrowedCars = async (req, res) => {
 exports.getFreeCars = async (req, res) => {
     try {
         const cars = await Car.find({
-            status: "free"
+            status: "Available"
         });
         if (!cars) {
             return res.status(400).json({
